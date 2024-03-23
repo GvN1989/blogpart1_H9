@@ -1,0 +1,34 @@
+.add-post-section {
+    background-color: var(--color-secondary-light);
+    text-align: center;
+    padding: 32px 0;
+    font-weight: 600;
+}
+
+.new-post-form{
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    width: 100%;
+
+}
+
+.new-post-form label {
+    text-align: left;
+    font-size: 14px;
+    color: #595F73;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.new-post-form input,
+.new-post-form textarea{
+    padding: 12px;
+    margin: 4px 0 12px 0;
+    border-radius: 6px;
+    border: 1px solid #D1D3DB;
+    background-color: var(--color-white);
+    width: 100%;
+
+}

@@ -1,16 +1,48 @@
-.page-container {
-    width: 100%;
-    height: 100vh;
-    color: white;
-    background: rgb(44,47,57);
-    /*Wil jij ook zo'n coole gradient maken? Deze is gemaakt via https://cssgradient.io/ - kind kan de was doen!*/
-    background: linear-gradient(37deg, rgba(44,47,57,1) 0%, rgba(0,0,0,1) 8%, rgba(80,83,92,1) 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.main-navigation{
+    background-color: var(--color-secondary);
+    padding: 16px 0;
 }
 
-.page-container img {
-    width: 500px;
+.inner-nav-container {
+    flex-basis: 1400px;
+    flex-shrink: 1;
+    flex-grow: 0;
+    margin: 0 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.main-navigation-logo-button{
+    background-color: transparent;
+    border: none;
+    max-width: 200px;
+}
+
+
+.main-navigation-links {
+    flex-basis: 350px;
+    display: flex;
+    list-style: none;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.main-navigation-links .active-link {
+    text-decoration: underline;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.main-navigation-links .default-link {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+}
+
+.main-navigation-links .active-link:hover,
+.main-navigation-links .default-link:hover {
+    color: var(--color-primary)
 }
