@@ -1,28 +1,51 @@
 import React, {useState} from "react";
 import posts from "../../constants/data.json";
-import {Link, useParams} from "react-router-dom";
 import './Overviewpost.css'
 import axios from "axios";
+import Button from "../../components/button/Button.jsx";
+import PostItem from "../../components/postItem/PostItem.jsx";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage.jsx";
 
 function OverviewPost(){
     const [post, setPost] = useState ([]);
     const [error, toggleError] = useState(false);
 
+    async function fetchPosts() {
+        toggleError(false);
 
-
+        try{
+            const response= await axios.get('http://localhost:3000/posts');
+            console.log(response.data);
+            setPost(response.data);
+        } catch (e) {
+            console.error(e)
+            toggleError(true)
+        }
+    }
 
     return (
+
         <section className="overview-section outer-content-container">
             <div className="inner-content-container">
-                    <h1> Bekijk alle {posts.length} posts op het platform </h1>
-                    <ul className="post-list">
-                        {posts.map((post)=> (
-                            <li key = {post.id} className="post-item">
-                                <h2 className="post-title"> <Link to={`/posts/${post.id}`}>{post.title} </Link> ({post.author})</h2>
-                                <p> {post.comments} reacties - {post.shares} keer gedeeld </p>
-                            </li>
-                        ))}
-                    </ul>
+                <Button type="button" onClick={fetchPosts} > Haal alle posts op</Button>
+                {posts.length>0 && (
+                    <>
+                       <h1>Bekijk alle {post.length} posts op het platform </h1>
+                        <ul className="post-list">
+                            {post.map((post)=> (
+                                <PostItem
+                                    key={post.id}
+                                    id={post.id}
+                                    title={post.title}
+                                    shares={post.shares}
+                                    comments={post.comments}
+                                    author={post.author}
+                                />
+                            ))}
+                        </ul>
+                    </>
+                )}
+                {error && <ErrorMessage message="Er is iets misgegaan bij het ophalen van de data. Probeer het opnieuw"/>}
             </div>
         </section>
     );

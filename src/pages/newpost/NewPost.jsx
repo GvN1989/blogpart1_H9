@@ -1,42 +1,39 @@
 import React, {useState} from "react";
 import './NewPost.css'
 import {useForm} from "react-hook-form"
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import calculateReadTime from "../../helpers/calculateReadTime.js";
+import axios from "axios";
+import Button from "../../components/button/Button.jsx";
 
 function NewPost() {
 
     const {register, handleSubmit, formState: {errors}} = useForm();
+    const [submitSuccessId, setSubmitSuccessId] = useState(null);
 
-   const navigate= useNavigate();
-
-    function handleFormSubmit(data){
-
-        if(Object.keys(errors).length=== 0) {
-        console.log( {
-            title: data.title,
-            subtitle: data.subtitle,
-            name: data.name,
-            blogpost: data.blogpost,
-            shares: 0,
-            comments: 0,
-            created: new Date().toISOString(),
-            readTime: calculateReadTime(data.blogpost)
-        });
-            console.log ("De blog is succesvol verzameld! 🌈");
-            navigate('/posts');
-        } else {
-
-        }
-
-    }
-
-
+   const onSubmit = async (data) => {
+       try {
+           const response= await axios.post('http://localhost:3000/posts', {
+               title: data.title,
+               subtitle: data.subtitle,
+               name: data.name,
+               content: data.content,
+               shares: 0,
+               comments: 0,
+               created: new Date().toISOString(),
+               readTime: calculateReadTime(data.content)
+           });
+           console.log ("De post is succesvol toegevoegd: je kunt deze hier  bekijken");
+           setSubmitSuccessId(response.data.id);
+       } catch (error) {
+           console.error("Error posting data:", error);
+            }
+   }
 
     return (
         <section className="add-post-section outer-content-container">
             <div className="inner-content-container__text-restriction">
-                <form className="new-post-form" onSubmit={handleSubmit(handleFormSubmit)}>
+                <form className="new-post-form" onSubmit={handleSubmit(onSubmit)}>
                     <h1> Post toevoegen </h1>
                     <label htmlFor="title-field">
                         Titel
@@ -78,13 +75,13 @@ function NewPost() {
                         />
                         {errors.name && <p>{errors.name.message}</p>}
                     </label>
-                    <label htmlFor="blogpost-field">
-                        Blogpost
+                    <label htmlFor="post-content">
+                        Blogpost </label>
                     <textarea
-                        id="blogpost-field"
+                        id="post-content"
                         rows="25"
                         cols="50"
-                        {...register("blogpost",{
+                        {...register("content",{
                             required: {
                                 value: true,
                                 message: "Dit veld is verplicht",
@@ -99,12 +96,13 @@ function NewPost() {
                                 }
                             })}
                         ></textarea>
-                        {errors.blogpost && <p>{errors.blogpost.message}</p>}
-                    </label>
-                    <button type="submit">
-                    Toevoegen
-                    </button>
+                    <Button type="submit" variant = "primary">
+                        Toevoegen
+                    </Button>
+                    {errors.content && <p>{errors.content.message}</p>}
                 </form>
+                {submitSuccessId && ( <p> De blogpost is succesvol toegevoegd. Je kunt deze <Link to={`/posts/${submitSuccessId}`}> hier</Link> bekijken. </p>
+                )}
             </div>
         </section>
     )
